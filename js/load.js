@@ -7,7 +7,7 @@ window.onload = function () {
     // for first time opening site:
     // if 'current-state' doesn't exist, use 'saved_state_Medical_Diagnosis'
     if (!savedState) {
-        stateToLoad = localStorage.getItem('saved_state_Medical_Diagnosis');
+        stateToLoad = localStorage.getItem('saved_state_Medical Diagnosis');
     }
 
     if (stateToLoad) {
@@ -26,7 +26,7 @@ window.onload = function () {
 
 
 function loadPresets() {
-    const medicalDiagnosisPreset = 'saved_state_Medical_Diagnosis';
+    const medicalDiagnosisPreset = 'saved_state_Medical Diagnosis';
 
     if (!localStorage.getItem(medicalDiagnosisPreset)) {
         fetch('data/medical_diagnosis_visualisation.json')

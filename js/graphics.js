@@ -72,7 +72,7 @@ graphicsContainer.addEventListener('wheel', (e) => {
     }
 
     // Apply the zoom by adjusting the grid size and positioning
-    objectsGrid.style.transform = `scale(${zoomFactor**2})`;
+    objectsGrid.style.transform = `scale(${zoomFactor})`;
     // drawObjects();
 });
 
@@ -134,6 +134,12 @@ function drawObjects(saved = []) {
         objectsGrid.appendChild(newObject);
     }
 
+    if(gridHeight >= window.innerHeight){
+        console.log("downscale grid...");
+        zoomFactor =   0.65 * window.innerHeight / gridHeight;
+        objectsGrid.style.transform = `scale(${zoomFactor})`;
+    }
+
     // Get position of the origin element
     const originRect = origin.getBoundingClientRect();
 
@@ -144,6 +150,8 @@ function drawObjects(saved = []) {
     updateProbabilityLabels();
 
 }
+
+
 
 function saveCurrentGridState(){
     const allObjects = Array.from(document.getElementsByClassName("object"));

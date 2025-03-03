@@ -13,12 +13,41 @@ function drawTree(){
     svg.call(zoom);
     const linkLabelDistance = 30;
 
+    // const treeLayout = d3.tree()
+    // .size([width * 0.4, height * 0.5])
+    // .separation((a, b) => {
+    //     const textSizeA = a.data.name.length * 80; // Approximate width based on text length
+    //     const textSizeB = b.data.name.length * 80;
+    //     return (a.parent === b.parent ? (textSizeA + textSizeB) / 80 : 3);
+    // });
+
     const treeLayout = d3.tree()
-        .size([width * 0.4, height * 0.5]) 
-        .separation((a, b) => (a.parent === b.parent ? 2 : 3));
+    .size([width * 0.4, height * 0.5])
+    .separation((a, b) => {
+        const lengthScale = 400;
+        const textSizeA = a.data.name.length * lengthScale; // Approximate width based on text length
+        const textSizeB = b.data.name.length * lengthScale;
+
+        // If both nodes are direct children of the root
+        if (a.parent === root && b.parent === root) {
+            // Find the max width of the widest child for both a and b
+            const maxChildWidthA = a.children ? Math.max(...a.children.map(c => c.data.name.length * lengthScale)) : 0;
+            const maxChildWidthB = b.children ? Math.max(...b.children.map(c => c.data.name.length * lengthScale)) : 0;
+            
+            // Add extra spacing based on the widest child
+            return ((textSizeA + textSizeB) / 80) + (maxChildWidthA + maxChildWidthB) / 80;
+        }
+
+        return a.parent === b.parent ? (textSizeA + textSizeB) / 80 : 3;
+    });
+
+
 
     const root = d3.hierarchy(data);
+
     treeLayout(root);
+
+    
 
     const link = g.selectAll(".link")
         .data(root.links())
@@ -120,7 +149,10 @@ function drawTree(){
     svg.call(zoom.transform, initialTransform);
 
     updateLinks();
+
 }
+
+
 
 function buildTreeData(){
     data = {};

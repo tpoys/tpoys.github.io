@@ -178,7 +178,7 @@ async function exportGridAsImage() {
             foreignObjectRendering: true,
             width: containerWidth + 5,
             height: containerHeight + 5,
-            scale: 1,
+            scale: 2,
             backgroundColor: null
         });
 

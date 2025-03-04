@@ -673,7 +673,7 @@ function togglePresetsMenu() {
         importJsonBtn.id = 'import-json-btn';
         importJsonBtn.style.color = '#fff';
         importJsonBtn.style.backgroundColor = 'var(--control-green)'
-        importJsonBtn.innerHTML = '<i class="fa-solid fa-file-import"></i>  Import .JSON';
+        importJsonBtn.innerHTML = '<i class="fa-solid fa-file-import"  style="margin-right:5px;"></i>  Import .JSON';
         main.appendChild(importJsonBtn);
 
 
@@ -743,7 +743,7 @@ function togglePresetsMenu() {
         exportJsonBtn.id = 'export-json-btn';
         exportJsonBtn.style.color = '#fff';
         exportJsonBtn.style.backgroundColor = 'var(--control-blue)'
-        exportJsonBtn.innerHTML = '<i class="fa-solid fa-file-export"></i>  Export as .JSON';
+        exportJsonBtn.innerHTML = '<i class="fa-solid fa-file-export"  style="margin-right:5px;"></i>  Export as .JSON';
 
         main.appendChild(exportJsonBtn)
 
@@ -802,37 +802,13 @@ function togglePresetsMenu() {
         imageHeading.innerText = "Export As Image";
         main.appendChild(imageHeading);
 
-        const checkboxContainer = document.createElement('div');
-        checkboxContainer.style.display = 'flex';
-        checkboxContainer.style.alignItems = 'center';
-        // checkboxContainer.style.margin = '8px 0';
-
-        // Create the checkbox
-        const includeKeyCheckbox = document.createElement('input');
-        includeKeyCheckbox.type = 'checkbox';
-        includeKeyCheckbox.id = 'include-key';
-        includeKeyCheckbox.checked = false; // Unchecked by default
-
-        // Create the label for the checkbox
-        const checkboxLabel = document.createElement('label');
-        checkboxLabel.htmlFor = 'include-key';
-        checkboxLabel.innerText = ' Include key in image';
-        checkboxLabel.style.fontSize = '14px';
-        checkboxLabel.style.marginLeft = '5px';
-
-        // Append checkbox and label to the container
-        checkboxContainer.appendChild(includeKeyCheckbox);
-        checkboxContainer.appendChild(checkboxLabel);
-
-        // Append the container to the main element
-        main.appendChild(checkboxContainer);
 
         const exportImageBtn = document.createElement('button');
         exportImageBtn.className = 'control-btn';
         exportImageBtn.id = 'export-image-btn';
         exportImageBtn.style.color = '#fff';
         exportImageBtn.style.backgroundColor = 'var(--control-blue)';
-        exportImageBtn.innerHTML = '<i class="fa-solid fa-image"></i>  Export grid as .PNG';
+        exportImageBtn.innerHTML = '<i class="fa-solid fa-image" style="margin-right: 5px;"></i>  Export grid as .PNG';
         main.appendChild(exportImageBtn);
 
         exportImageBtn.addEventListener('click', function(){
@@ -847,12 +823,30 @@ function togglePresetsMenu() {
 
         });
 
+        const exportKeyBtn = document.createElement('button');
+        exportKeyBtn.className = 'control-btn';
+        exportKeyBtn.id = 'export-key-btn';
+        exportKeyBtn.style.color = '#fff';
+        exportKeyBtn.style.backgroundColor = 'var(--control-blue)';
+        exportKeyBtn.innerHTML = '<i class="fa-solid fa-key" style="margin-right:5px;"></i>  Export key as .PNG';
+        main.appendChild(exportKeyBtn);
+
+        exportKeyBtn.addEventListener('click', function(){
+            this.innerHTML = `<i class="fa-solid fa-image"></i>  Saving...`;
+            this.style.background = 'var(--dark-grey-3)';
+            this.style.pointerEvents = 'none';
+
+            // Allow the UI changes to apply before calling the function
+            setTimeout(() => {
+                exportKeyAsImage();
+            }, 0);
+        });
+
+
 
         menu.appendChild(main);
         document.body.appendChild(menu);
-        // menu.style.left = '70%'
 
-        // Make key draggable and resizable
         makeDraggable(menu);
 
         updatePresetOptions();

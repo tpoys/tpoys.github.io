@@ -181,6 +181,7 @@ svg {
     z-index: 0;
     display: block;
     cursor: grab;
+    background-color: var(--dark-grey-1);
 }
 .node text {
     font-size: 18px;

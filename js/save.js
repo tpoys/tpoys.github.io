@@ -195,9 +195,81 @@ async function exportGridAsImage() {
     }
 
     const saveImageBtn = document.getElementById('export-image-btn');
-    saveImageBtn.innerHTML = `<i class="fa-solid fa-image"></i>  Export grid as .PNG`;
+    saveImageBtn.innerHTML = `<i class="fa-solid fa-image" style="margin-right:5px;"></i>  Export grid as .PNG`;
     saveImageBtn.style.background = 'var(--control-blue)';
     saveImageBtn.style.pointerEvents = 'all';
 }
 
 
+
+async function exportKeyAsImage() {
+    if(document.getElementById('key')){
+        if(key.style.display == 'none'){
+            toggleKey();
+        }
+    }
+    else{
+        toggleKey();
+    }
+
+    const keyDiv = document.getElementById('key');
+
+    const container = document.createElement("div");
+    container.style.position = "absolute";
+    container.style.left = "1px";
+    container.style.top = "1px";
+    container.style.zIndex = -1;
+
+    const keyClone = keyDiv.cloneNode(true);
+    keyClone.id = 'key-clone';
+    keyClone.style.background = `var(--dark-grey-2)`;
+    keyClone.style.borderRadius = `6px`;
+    keyClone.style.transform = `scale(1)`;
+
+    const resizeHandle = keyClone.querySelector('#resize-handle');
+    if (resizeHandle) resizeHandle.remove();
+    const closeBtn = keyClone.querySelector('.top-bar .close-btn');
+    if (closeBtn) closeBtn.remove();
+
+    container.appendChild(keyClone);
+    document.body.appendChild(container)
+    // await new Promise(resolve => setTimeout(resolve, 100));
+
+    try {
+        const canvas = await html2canvas(container, {
+            useCORS: true,
+            foreignObjectRendering: true,
+            scale: 2,
+            backgroundColor: null
+        });
+
+        document.body.removeChild(container);
+
+        // Convert canvas to a blob and create a blob URL
+        canvas.toBlob(blob => {
+            const blobURL = URL.createObjectURL(blob);
+            window.open(blobURL, "_blank"); // Opens in browser's native image viewer
+        }, "image/png");
+
+    } catch (error) {
+        console.error("Screenshot capture failed:", error);
+    }
+
+    // html2canvas(container, { logging: true, useCORS: true, backgroundColor: null, scale:2}).then(canvas => {
+    //     canvas.toBlob(blob => {
+    //         if (!blob) {
+    //             console.error('Failed to generate image blob');
+    //             return;
+    //         }
+    //         const blobURL = URL.createObjectURL(blob);
+    //         window.open(blobURL, '_blank');
+    //     }, 'image/png');
+    // });
+
+    // document.body.removeChild(container);
+
+    const saveImageBtn = document.getElementById('export-key-btn');
+    saveImageBtn.innerHTML = `<i class="fa-solid fa-key" style="margin-right:5px;"></i>  Export key as .PNG`;
+    saveImageBtn.style.background = 'var(--control-blue)';
+    saveImageBtn.style.pointerEvents = 'all';
+}

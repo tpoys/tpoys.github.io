@@ -21,7 +21,7 @@ window.onload = async function () {
 
     setTimeout(() => {
         infoPopup('<b>Left-click + Drag</b> to Pan<br><b>Scroll</b> to Zoom', 5);
-    }, 2000);
+    }, 1000);
 };
 
 async function loadPresets() {

@@ -342,10 +342,10 @@ function updatePresentationView(){
         description.innerHTML = `P(Hypothesis | Evidence)<br><br>This is what we want to calculate.</br>Represents the updated probability of ${event} given that ${evidence} has occured.`;
         calculationHead.innerHTML = `P(${event} | ${evidence})`;
         // function likelihood(){likelihoodText.click()};
-        infoNumerator.innerHTML = `<p style='font-size:18px;cursor:pointer;' onclick="likelihoodText.click();">P(${evidence} | ${event})</p>`;
+        infoNumerator.innerHTML = `<p class="presentation-bayes-element" onclick="likelihoodText.click();">P(${evidence} | ${event})</p>`;
         infoNumerator.innerHTML += `<span style='margin: 0 10px; font-size:18px; opacity:0.5;'>&times</span>`;
-        infoNumerator.innerHTML += `<p style='font-size:18px; cursor:pointer;' onclick="priorText.click()";>P(${event})</p>`;
-        infoDenominator.innerHTML = `<p style='font-size:18px; cursor:pointer;' onclick="marginalText.click()";>P(${evidence})</p>`;
+        infoNumerator.innerHTML += `<p class="presentation-bayes-element" onclick="priorText.click()";>P(${event})</p>`;
+        infoDenominator.innerHTML = `<p class="presentation-bayes-element" onclick="marginalText.click()";>P(${evidence})</p>`;
         calculationResult.innerHTML = `= (${jointCount}/${eventCount} &times ${eventCount}/${total}) / (${evidenceCount}/${total})<br><br> = ${jointCount}/${evidenceCount} <b>${formatAnswer(probability)}</b>`;
 
     }

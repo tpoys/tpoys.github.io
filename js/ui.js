@@ -494,6 +494,7 @@ function toggleKey() {
             // create key element
             const key = document.createElement('div');
             key.id = 'key';
+            key.style.zIndex = '900';
             const keyBar = document.createElement('div');
             keyBar.className = 'top-bar draggable';
             keyBar.innerText = 'Key';
@@ -609,6 +610,8 @@ function togglePresetsMenu() {
         // Create key popup
         const menu = document.createElement('div');
         menu.id = 'presets-menu';
+        menu.style.zIndex = '900';
+
 
         // Create draggable bar
         const topBar = document.createElement('div');
@@ -909,6 +912,10 @@ function makeDraggable(element) {
 
     handle.onmousedown = (e) => {
         handle.style.cursor = "grabbing";
+        // console.log(`${element.id}: z-index=${element.style.zIndex}`);
+        // element.style.zIndex = (parseInt(element.style.zIndex) || 0) + 1;
+        // console.log(`${element.id}: z-index=${element.style.zIndex}`);
+        bringToFront(element);
         isDragging = true;
         offsetX = e.clientX - element.offsetLeft;
         offsetY = e.clientY - element.offsetTop;
@@ -923,8 +930,16 @@ function makeDraggable(element) {
             isDragging = false;
             document.onmousemove = null;
             document.onmouseup = null;
+
         };
     };
+}
+
+function bringToFront(element) {
+    let maxZ = Math.max(...Array.from(document.querySelectorAll("*"))
+        .map(el => parseFloat(window.getComputedStyle(el).zIndex) || 0));
+    // element.style.position = "absolute"; // Ensure positioning
+    element.style.zIndex = maxZ + 1;
 }
 
 // Function to make a div resizable
@@ -1078,3 +1093,89 @@ function infoPopup(html, duration=5) {
     }, duration * 1000);
 }
 
+function showFeedbackForm(){
+    const container = document.createElement('div');
+    container.id = 'feedback-form-container';
+
+    const form = document.createElement('div');
+    form.id = 'feedback-form';
+
+    const header = document.createElement('h2');
+    header.innerText = 'Help Me Improve This Project!';
+    form.appendChild(header);
+
+    const line = document.createElement('hr');
+    form.appendChild(line);
+
+    function createStarRating(name) {
+        const starContainer = document.createElement('div');
+        starContainer.className = 'star-rating';
+        for (let i = 5; i >= 1; i--) {
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = name;
+            input.value = i;
+            input.id = `${name}-${i}`;
+
+            const label = document.createElement('label');
+            label.htmlFor = `${name}-${i}`;
+            label.innerHTML = `<i class='fa-solid fa-star'></i>`;
+
+            starContainer.appendChild(input);
+            starContainer.appendChild(label);
+        }
+        return starContainer;
+    }
+
+
+    const ease = document.createElement('p');
+    ease.innerText = 'How easy have found using the app?';
+    form.appendChild(ease);
+    form.appendChild(createStarRating('ease'));
+
+    const help = document.createElement('p');
+    help.innerText = 'How helpful have these visualisations been for learning/teaching?';
+    form.appendChild(help);
+    form.appendChild(createStarRating('help'));
+
+    const improve = document.createElement('p');
+    improve.innerText = 'How can I improve this project?';
+    form.appendChild(improve);
+
+    const textInput = document.createElement('textarea');
+    form.appendChild(textInput);
+
+    const line2 = document.createElement('hr');
+    form.appendChild(line2);
+
+
+    const btnContainer = document.createElement('div');
+    btnContainer.style.display = 'flex';
+    btnContainer.style.gap = '10px';
+
+    const cancelBtn = document.createElement('button');
+    cancelBtn.innerText = 'No Thanks';
+    cancelBtn.className = 'control-btn';
+    cancelBtn.style.backgroundColor = 'grey';
+    cancelBtn.style.color = 'white';
+    cancelBtn.style.fontSize = '14px';
+    cancelBtn.onclick = function(){
+        container.remove();
+    }
+    btnContainer.appendChild(cancelBtn);
+
+    const submitBtn = document.createElement('button');
+    submitBtn.innerText = 'Submit Feedback';
+    submitBtn.className = 'control-btn';
+    submitBtn.style.backgroundColor = 'var(--control-blue)';
+    submitBtn.style.color = 'white';
+    submitBtn.style.fontSize = '14px';
+    btnContainer.appendChild(submitBtn);
+
+    form.appendChild(btnContainer);
+
+    container.appendChild(form);
+    document.body.appendChild(container);
+}
+
+document.getElementById('open-feedback-btn').addEventListener('click', showFeedbackForm);

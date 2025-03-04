@@ -51,9 +51,10 @@ function renameLabel(eventBase) {
 function customiseEvidence(evidenceBase) {
     console.log(`customise ${evidenceBase}`)
     const popup = document.createElement('div');
+    // popup.style.zIndex = '900';
     popup.className = 'customise-menu';
     popup.style.position = 'fixed';
-    // popup.style.zIndex = '99999';
+    popup.style.zIndex = '99999';
     // popup.style.opacity = '99999';
 
     // position the popup to the right of the element '#evidence-controls-container'

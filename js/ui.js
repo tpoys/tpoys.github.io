@@ -1100,6 +1100,17 @@ function showFeedbackForm(){
     const form = document.createElement('div');
     form.id = 'feedback-form';
 
+    const closeButton = document.createElement('button');
+    closeButton.innerText = '✖';
+    closeButton.className = 'close-btn';
+    closeButton.style.position = 'absolute';
+    closeButton.style.top = '12px';
+    closeButton.style.right = '12px';
+    closeButton.onclick = function () {
+        container.remove();
+    };
+    form.appendChild(closeButton);
+
     const header = document.createElement('h2');
     header.innerText = 'Help Me Improve This Project!';
     form.appendChild(header);
@@ -1129,7 +1140,7 @@ function showFeedbackForm(){
 
 
     const ease = document.createElement('p');
-    ease.innerText = 'How easy have found using the app?';
+    ease.innerText = 'How easy have you found using the app?';
     form.appendChild(ease);
     form.appendChild(createStarRating('ease'));
 

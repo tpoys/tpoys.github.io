@@ -1346,3 +1346,26 @@ function showFeedbackForm(){
 }
 
 document.getElementById('open-feedback-btn').addEventListener('click', showFeedbackForm);
+
+
+function lightMode(){
+        // --light-grey:rgb(63, 63, 63);
+    // --dark-grey-1:rgb(207, 207, 207);
+    // --dark-grey-2:rgb(228, 228, 228);
+    // --dark-grey-3:rgb(245, 245, 245);
+    document.documentElement.style.setProperty('--dark-grey-1', 'rgb(233, 233, 233)');
+    document.documentElement.style.setProperty('--dark-grey-2', 'rgb(243, 243, 243)');
+    document.documentElement.style.setProperty('--dark-grey-3', 'rgb(255, 255, 255)');
+    document.documentElement.style.setProperty('--light-grey', 'rgb(63, 63, 63)');
+    document.documentElement.style.setProperty('--main-text', '#000');
+
+}
+
+function darkMode(){
+
+    document.documentElement.style.setProperty('--dark-grey-1', '#202020');
+    document.documentElement.style.setProperty('--dark-grey-2', '#292929');
+    document.documentElement.style.setProperty('--dark-grey-3', '#3d3d3d');
+    document.documentElement.style.setProperty('--light-grey', '#f1f1f1');
+    document.documentElement.style.setProperty('--main-text', '#fff');
+}

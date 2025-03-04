@@ -72,7 +72,7 @@ graphicsContainer.addEventListener('wheel', (e) => {
     }
 
     // Apply the zoom by adjusting the grid size and positioning
-    objectsGrid.style.transform = `scale(${zoomFactor})`;
+    objectsGrid.style.transform = `scale(${zoomFactor**2})`;
     // drawObjects();
 });
 

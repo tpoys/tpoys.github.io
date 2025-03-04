@@ -1112,7 +1112,7 @@ function showFeedbackForm(){
     form.appendChild(closeButton);
 
     const header = document.createElement('h2');
-    header.innerText = 'Help Me Improve This Project!';
+    header.innerText = 'Help me improve this project!';
     form.appendChild(header);
 
     const line = document.createElement('hr');
@@ -1142,18 +1142,19 @@ function showFeedbackForm(){
     const ease = document.createElement('p');
     ease.innerText = 'How easy have you found using the app?';
     form.appendChild(ease);
-    form.appendChild(createStarRating('ease'));
+    form.appendChild(createStarRating('ease-of-use'));
 
     const help = document.createElement('p');
     help.innerText = 'How helpful have these visualisations been for learning/teaching?';
     form.appendChild(help);
-    form.appendChild(createStarRating('help'));
+    form.appendChild(createStarRating('helpful'));
 
     const improve = document.createElement('p');
     improve.innerText = 'How can I improve this project?';
     form.appendChild(improve);
 
     const textInput = document.createElement('textarea');
+    textInput.name = 'feedback-input';
     form.appendChild(textInput);
 
     const line2 = document.createElement('hr');
@@ -1181,12 +1182,167 @@ function showFeedbackForm(){
     submitBtn.style.backgroundColor = 'var(--control-blue)';
     submitBtn.style.color = 'white';
     submitBtn.style.fontSize = '14px';
+    submitBtn.onclick = function () {
+        submitBtn.innerText = 'Submitting...';
+        submitBtn.style.pointerEvents = 'none';
+        const easeOfUse = document.querySelector('input[name="ease-of-use"]:checked')?.value || "";
+        const isItHelpful = document.querySelector('input[name="helpful"]:checked')?.value || "";
+        const feedbackInput = textInput.value || "";
+
+        if(feedbackInput.toLowerCase().includes("woody")){
+            console.log("WOODY");
+            // document.getElementById('feedback-form').remove();
+            // const form = document.createElement('div');
+            // form.id = 'feedback-form';
+            form.innerHTML = '';
+            form.style.rowGap = '36px';
+
+            const closeButton = document.createElement('button');
+            closeButton.innerText = '✖';
+            closeButton.className = 'close-btn';
+            closeButton.style.position = 'absolute';
+            closeButton.style.top = '12px';
+            closeButton.style.right = '12px';
+            closeButton.onclick = function () {
+                container.remove();
+            };
+            form.appendChild(closeButton);
+
+            const thankYou = document.createElement('h2');
+            thankYou.innerHTML = `<i class="fa-solid fa-circle-check" style="color:var(--control-green)"></i> Thank you for your feedback!`;
+            form.appendChild(thankYou);
+
+            const gif = document.createElement('img');
+            gif.src = '../images/woody_static.png'; 
+            gif.style.width = '80%';
+            form.appendChild(gif);
+
+            const welcome = document.createElement('button');
+            welcome.id = 'dap';
+            welcome.innerHTML = `<i class="fa-solid fa-handshake"></i> Dap  Woody`;
+            welcome.className = 'control-btn';
+            welcome.style.backgroundColor = 'var(--control-blue)';
+            welcome.style.color = 'white';
+            welcome.style.fontSize = '14px';
+            welcome.onclick = function () {
+                gif.src = '../images/woody.gif?' + new Date().getTime();
+                welcome.style.backgroundColor = 'grey';
+                welcome.style.pointerEvents = 'none';
+                welcome.style.display = 'none';
+                document.getElementById('dont-dap').style.display = 'none';
+                setTimeout(() => {
+                    container.style.opacity = 0;
+                    setTimeout(() => {
+                        container.remove();
+                    }, 200);
+                }, 2000); 
+            };
+            form.appendChild(welcome);
+
+            const dontdap = document.createElement('button');
+            dontdap.id = 'dont-dap';
+            dontdap.innerHTML = `<i class="fa-solid fa-heart-crack"></i> Don't Dap`;
+            dontdap.className = 'control-btn';
+            dontdap.style.color = 'white';
+            dontdap.onclick = function () {
+                dontdap.style.display = 'none';
+                welcome.style.display = 'none';
+                setTimeout(() => {
+                    gif.src = '../images/woody_sad.png'; 
+                    // container.style.transition = 'all ease 1s';
+                    setTimeout(() => {
+                        container.style.opacity = 0;
+                        setTimeout(() => {
+                            container.remove();
+                        }, 200);
+                    }, 1000);
+                }, 0);
+            };
+            form.appendChild(dontdap);
+            console.log("WOODY-d");
+            container.appendChild(form);
+
+        }
+        else{
+            console.log("post feedback");
+            fetch("https://formspree.io/f/xzzdnlwe", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ easeOfUse, isItHelpful, feedbackInput })
+            })
+            .then(response => {
+                if (response.ok) {
+                    form.innerHTML = '';
+                    form.style.rowGap = '36px';
+
+                    const closeButton = document.createElement('button');
+                    closeButton.innerText = '✖';
+                    closeButton.className = 'close-btn';
+                    closeButton.style.position = 'absolute';
+                    closeButton.style.top = '12px';
+                    closeButton.style.right = '12px';
+                    closeButton.onclick = function () {
+                        container.remove();
+                    };
+                    form.appendChild(closeButton);
+
+                    const thankYou = document.createElement('h2');
+                    thankYou.innerHTML = `<i class="fa-solid fa-circle-check" style="color:var(--control-green)"></i> Thank you for your feedback!`;
+                    form.appendChild(thankYou);
+
+                    const gif = document.createElement('img');
+                    gif.src = '../images/woody_static.png'; 
+                    gif.style.width = '80%';
+                    form.appendChild(gif);
+
+                    const welcome = document.createElement('button');
+                    welcome.innerHTML = `<i class="fa-solid fa-handshake"></i> You're Welcome!`;
+                    welcome.className = 'control-btn';
+                    welcome.style.backgroundColor = 'var(--control-blue)';
+                    welcome.style.color = 'white';
+                    welcome.style.fontSize = '14px';
+                    welcome.onclick = function () {
+                        gif.src = '../images/woody.gif?' + new Date().getTime();
+                        welcome.style.backgroundColor = 'grey';
+                        welcome.style.pointerEvents = 'none';
+                        setTimeout(() => {
+                            container.style.opacity = 0;
+                            setTimeout(() => {
+                                container.remove();
+                            }, 200);
+                        }, 2000); 
+                    };
+                    form.appendChild(welcome);
+
+
+                } else {
+                    alert("Something went wrong. Please try again.");
+                    submitBtn.innerText = 'Submit Feedback';
+                    submitBtn.style.pointerEvents = 'all';
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("Error submitting feedback.");
+                submitBtn.innerText = 'Submit Feedback';
+                submitBtn.style.pointerEvents = 'all';
+            });
+        }
+    };
+    
+    
     btnContainer.appendChild(submitBtn);
 
     form.appendChild(btnContainer);
 
     container.appendChild(form);
     document.body.appendChild(container);
+
+    // container.addEventListener('click', function (event) {
+    //     if (!form.contains(event.target)) {
+    //         container.remove();
+    //     }
+    // });
 }
 
 document.getElementById('open-feedback-btn').addEventListener('click', showFeedbackForm);

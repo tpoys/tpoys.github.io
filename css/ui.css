@@ -652,7 +652,7 @@ input:checked + .slider .grid-icon {
 #key, #presets-menu {
     position: fixed;
     top: 35%;
-    left: 88%;
+    left: 85%;
     background-color: var(--dark-grey-2);
     border-radius: 6px;
     border: solid 1px var(--dark-grey-1);
@@ -863,6 +863,7 @@ input:checked + .slider .grid-icon {
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: all ease .2s;
 }
 
 #feedback-form{
@@ -870,10 +871,14 @@ input:checked + .slider .grid-icon {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: space-around;
     padding: 36px;
     row-gap: 16px;
     border-radius: 6px;
     position: relative;
+    /* height: 550px; */
+    /* width: 500px; */
+
 }
 
 #feedback-form hr{
@@ -900,7 +905,7 @@ input:checked + .slider .grid-icon {
     display: flex;
     flex-direction: row-reverse;
     justify-content: center;
-    gap: 10px;
+    /* gap: 10px; */
     margin-bottom: 16px;
 }
 
@@ -913,6 +918,8 @@ input:checked + .slider .grid-icon {
     color: gray;
     cursor: pointer;
     transition: all ease 0.2s;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 
 /* 5-star rating (green) */
@@ -927,7 +934,7 @@ input:checked + .slider .grid-icon {
 
 /* 3-star rating (yellow) */
 .star-rating input:checked:nth-of-type(3) ~ label {
-    color: rgb(243, 218, 78);
+    color: rgb(219, 197, 70);
 }
 
 /* 2-star rating (orange) */
@@ -959,7 +966,7 @@ input:checked + .slider .grid-icon {
 
 .star-rating label:nth-of-type(3):hover,
 .star-rating label:nth-of-type(3):hover ~ label {
-    color: rgb(243, 218, 78);
+    color: rgb(219, 197, 70);
 }
 
 .star-rating label:nth-of-type(4):hover,
@@ -970,4 +977,26 @@ input:checked + .slider .grid-icon {
 .star-rating label:nth-of-type(5):hover,
 .star-rating label:nth-of-type(5):hover ~ label {
     color: rgb(241, 101, 77);
+}
+
+
+#dap{
+    position: absolute;
+    font-size: 20px !important;
+    top: 52%;
+    left: 10%;
+    transition: all ease .15s;
+}
+
+#dont-dap{
+    position: absolute;
+    font-size: 16px !important;
+    top: 60%;
+    left: 64%;
+    transition: all ease .15s;
+    background-color: rgb(223, 65, 65);
+}
+
+#dap:hover, #dont-dap:hover{
+    transform: scale(1.2);
 }

@@ -1,27 +1,60 @@
 window.onload = async function () {
-    await loadPresets(); // Ensure presets are loaded before continuing
+    const urlParams = new URLSearchParams(window.location.search);
+
+    await loadPresets();
 
     const savedState = localStorage.getItem('current-state');
     let stateToLoad = savedState;
 
     if (!savedState) {
-        stateToLoad = localStorage.getItem('saved_state_Medical Diagnosis');
-        console.log("No saved state. Loading Medical Diagnosis...");
+        stateToLoad = localStorage.getItem('saved_state_Empty');
     }
 
     if (stateToLoad) {
         try {
             const parsedState = JSON.parse(stateToLoad);
-            console.log("Parsing Medical Diagnosis...");
             loadState(parsedState);
         } catch (error) {
-            console.error('Error parsing state:', error);
+            console.error('error parsing state:', error);
         }
     }
 
-    setTimeout(() => {
-        infoPopup('<b>Left-click + Drag</b> to Pan<br><b>Scroll</b> to Zoom', 5);
-    }, 1000);
+    if (urlParams.get('source') === 'home') {
+        urlParams.delete('source');
+        const newUrl = window.location.pathname + '?' + urlParams.toString();
+        window.history.replaceState({}, '', newUrl.endsWith('?') ? window.location.pathname : newUrl);
+
+        document.getElementById('welcome-container').style.display = 'flex';
+        const loadStateSelect = document.getElementById('welcome-preset-select');
+        loadStateSelect.innerHTML = "";
+        for (let i = 0; i < localStorage.length; i++) {
+            const key = localStorage.key(i);
+            if (key.startsWith('saved_state_')) {
+                const option = document.createElement('option');
+                const name = key.replace('saved_state_', '');
+                option.value = key;
+                option.innerText = name;
+                loadStateSelect.appendChild(option);
+            }
+        }  
+        loadStateSelect.value = 'saved_state_Medical Diagnosis';
+    
+    }
+    else if (urlParams.get('tutorial') === 'true'){
+        startTutorial();
+    }
+    else{
+        toggleKey();
+
+        setTimeout(() => {
+            infoPopup(`Use <b>CTRL +</b> and <b>CTRL -</b><br>to scale the page to fit on your screen`, 5);
+        }, 1000);
+    
+        setTimeout(() => {
+            infoPopup('<b>Left-click + Drag</b> to Pan<br><b>Scroll</b> to Zoom', 5);
+        }, 7000);
+    }
+    
 };
 
 async function loadPresets() {
@@ -40,12 +73,11 @@ async function loadPresets() {
 
                 const data = await response.json();
                 localStorage.setItem(key, JSON.stringify(data));
-                console.log(`Preset data loaded into localStorage for ${key}.`);
             } catch (error) {
-                console.error(`Error loading preset for ${key}:`, error);
+                console.error(`error loading preset for ${key}:`, error);
             }
         } else {
-            console.log(`Preset already exists in localStorage for ${key}.`);
+            console.log(`preset already exists in localStorage for ${key}.`);
         }
     }
 }

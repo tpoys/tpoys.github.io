@@ -3,25 +3,14 @@ let isDragging = false;
 let offsetX = 0;
 let offsetY = 0;
 let zoomFactor = 1;
-let rightClickStart = null;
-let isRightClickMove = false;
 
-// prevents right-click context menu from appearing when dragging
-graphicsContainer.addEventListener('contextmenu', (e) => {
-    if (isRightClickMove) {
-        e.preventDefault();
-    }
-});
 
-// right-click and drag to pan graphics
 graphicsContainer.addEventListener('mousedown', (e) => {
     if (e.button === 0 && !selectionMode) {
         isDragging = true;
         offsetX = e.clientX - origin.getBoundingClientRect().left;
         offsetY = e.clientY - origin.getBoundingClientRect().top;
         graphicsContainer.style.cursor = 'grabbing';
-        rightClickStart = { x: e.clientX, y: e.clientY };
-        isRightClickMove = false; 
     }
 });
 
@@ -35,10 +24,6 @@ graphicsContainer.addEventListener('mousemove', (e) => {
 
         objectsGrid.style.left = `${newX - objectsGrid.offsetWidth / 2}px`;
         objectsGrid.style.top = `${newY - objectsGrid.offsetHeight / 2}px`;
-
-        if (Math.abs(e.clientX - rightClickStart.x) > 5 || Math.abs(e.clientY - rightClickStart.y) > 5) {
-            isRightClickMove = true;
-        }
     }
 });
 
@@ -51,17 +36,13 @@ graphicsContainer.addEventListener('mouseup', () => {
         graphicsContainer.style.cursor = 'crosshair';
 
     }
-    rightClickStart = null;
 });
 
 graphicsContainer.addEventListener('mouseleave', () => {
     isDragging = false;
     graphicsContainer.style.cursor = 'grab';
-    rightClickStart = null;
-    isRightClickMove = false;
 });
 
-// scroll to zoom
 graphicsContainer.addEventListener('wheel', (e) => {
     e.preventDefault();
     const zoomSpeed = 0.025;
@@ -71,36 +52,30 @@ graphicsContainer.addEventListener('wheel', (e) => {
         zoomFactor = Math.max(zoomFactor - zoomSpeed, 0.1);
     }
 
-    // Apply the zoom by adjusting the grid size and positioning
-    objectsGrid.style.transform = `scale(${zoomFactor**2})`;
-    // drawObjects();
+    objectsGrid.style.transform = `scale(${zoomFactor**3})`;
 });
 
 function drawObjects(saved = []) {
-    // saved = saveCurrentGridState();
     objectsGrid.innerHTML = '';
     numObjects = document.getElementById('input-num-objects').value
 
-    let gridSize = Math.ceil(Math.sqrt(numObjects)); // This ensures a rough square shape
-    var gap = objectsGrid.style.gap; // Space between objects adjusted for zoom
+    let gridSize = Math.ceil(Math.sqrt(numObjects));
+    var gap = objectsGrid.style.gap;
     gap = 0;
-    const objectSize = 70; // Size of each object adjusted for zoom
+    const objectSize = 70;
     const gapSize = 15;
     const borderWidth = 7;
-    // Adjust the grid layout
-    objectsGrid.style.gridTemplateColumns = `repeat(${gridSize}, ${objectSize}px)`; // Adjust column width based on zoom
-    objectsGrid.style.gridTemplateRows = `repeat(${gridSize}, ${objectSize}px)`; // Adjust row height based on zoom
+    
+    objectsGrid.style.gridTemplateColumns = `repeat(${gridSize}, ${objectSize}px)`;
+    objectsGrid.style.gridTemplateRows = `repeat(${gridSize}, ${objectSize}px)`;
 
-    // Calculate the correct size of the grid
-    const gridWidth = gridSize * (objectSize + 0) - 0; // Total width of grid
-    const gridHeight = gridWidth; // Keep the grid square
+    const gridWidth = gridSize * (objectSize + 0) - 0;
+    const gridHeight = gridWidth;
 
-    // Set grid size
     objectsGrid.style.width = `${gridWidth}px`;
     objectsGrid.style.height = `${gridHeight}px`;
     objectsGrid.style.gap = `${gapSize}px`;
 
-    // Add objects to the grid
     for (let i = 0; i < numObjects; i++) {
         const newObject = document.createElement('div');
         if(saved[i]){
@@ -111,7 +86,6 @@ function drawObjects(saved = []) {
         else{
             newObject.classList.add('object');
             const randEvent = eventsList[Math.floor(Math.random() * eventsList.length)];
-            // console.log("rand event: " + randEvent)
             newObject.classList.add(`${randEvent}-object`);
             if(evidenceTabOpened){
                 const randEvidence = evidenceList[Math.floor(Math.random() * evidenceList.length)];
@@ -130,20 +104,16 @@ function drawObjects(saved = []) {
 
         newObject.style.width = `${objectSize}px`;
         newObject.style.height = `${objectSize}px`;
-        // newObject.style.borderWidth = `${borderWidth}px`;
         objectsGrid.appendChild(newObject);
     }
 
     if(gridHeight >= window.innerHeight){
-        console.log("downscale grid...");
         zoomFactor =   0.65 * window.innerHeight / gridHeight;
         objectsGrid.style.transform = `scale(${zoomFactor})`;
     }
 
-    // Get position of the origin element
     const originRect = origin.getBoundingClientRect();
 
-    // Set position of the grid to match the origin's position
     objectsGrid.style.top = `${originRect.top + originRect.height / 2 - gridHeight / 2}px`;
     objectsGrid.style.left = `${originRect.left + originRect.width / 2 - gridWidth / 2}px`;
 
@@ -306,7 +276,6 @@ function updatePresentationView(){
     backBtn.style.backgroundColor = 'var(--dark-grey-1)';
     backBtn.style.fontSize = '16px';
     backBtn.addEventListener('click', function(){
-        // document.getElementById('navbar-bayes').click();
         if(fromBayesSection){
             document.getElementById('bayes-controls-container').style.display = 'flex';
             document.getElementById('navbar-bayes').classList.add('active');
@@ -341,7 +310,6 @@ function updatePresentationView(){
         title.innerText = "Posterior Probability";
         description.innerHTML = `P(Hypothesis | Evidence)<br><br>This is what we want to calculate.</br>Represents the updated probability of ${event} given that ${evidence} has occured.`;
         calculationHead.innerHTML = `P(${event} | ${evidence})`;
-        // function likelihood(){likelihoodText.click()};
         infoNumerator.innerHTML = `<p class="presentation-bayes-element" onclick="likelihoodText.click();">P(${evidence} | ${event})</p>`;
         infoNumerator.innerHTML += `<span style='margin: 0 10px; font-size:18px; opacity:0.5;'>&times</span>`;
         infoNumerator.innerHTML += `<p class="presentation-bayes-element" onclick="priorText.click()";>P(${event})</p>`;
@@ -375,9 +343,7 @@ function updatePresentationView(){
         calculationResult.innerHTML = `= ${evidenceCount}/${total} ${formatAnswer(probability)}`;
 
     }
-    else{
-        console.log(`selected element: ${selectedElement.id}`);
-    }
+
     const minimiseBtn = document.createElement('button');
     minimiseBtn.className = 'minimise-btn';
     minimiseBtn.innerHTML = '<i class="fa-solid fa-xmark"></i>';
@@ -413,23 +379,3 @@ function focusAllObjects(){
     });
 
 }
-
-
-// initialState = [["object","event-2-object"],
-//                 ["object","event-2-object"],
-//                 ["object","event-2-object"],
-//                 ["object","event-2-object"],
-//                 ["object","event-2-object"],
-//                 ["object","event-2-object"],
-//                 ["object","event-1-object"],
-//                 ["object", "event-1-object"],
-//                 ["object", "event-1-object"],
-//                 ["object", "event-1-object"],
-//                 ["object", "event-1-object"],
-//                 ["object", "event-1-object"],
-//                 ["object", "event-1-object"],
-//                 ["object", "event-1-object"],
-//                 ["object", "event-1-object"],
-//                 ["object", "event-1-object"]]
-                
-// drawObjects(initialState);

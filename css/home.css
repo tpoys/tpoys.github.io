@@ -1,0 +1,108 @@
+html, body{
+    background-color: var(--dark-grey-1);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    row-gap: 58px;
+    /* background: linear-gradient(to bottom, rgb(53, 53, 53), rgb(14, 14, 14)); */
+}
+
+#title-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+h1,h2{
+    margin: 0;
+    padding: 0;
+}
+
+#welcome-to-heading{
+    font-weight: 100;
+    font-size: 45px;
+}
+
+#Visualising-bayes-theorem-heading{
+    font-weight: 400;
+    font-size: 70px;
+}
+
+
+#home-controls-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    column-gap: 56px;
+    background-color: rgba(255, 255, 255, 0.075);
+    padding: 40px 50px;
+    box-sizing: border-box;
+
+    border-radius: 6px;
+}
+
+
+.home-controls-subcontainer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    row-gap: 20px;
+    box-sizing: border-box;
+
+}
+
+.home-controls-subcontainer p{
+    opacity: .75;
+}
+
+.home-button-label{
+    margin: 0;
+    padding: 0;
+}
+
+.home-button{
+    padding: 10px 16px;
+    font-size: 16px;
+    border-radius: 6px;
+    box-sizing: border-box;
+    transition: all ease .15s;
+    cursor: pointer;
+
+}
+
+.home-button:hover{
+    transform: scale(1.1);
+}
+
+.home-button i{
+    margin-right: 4px;
+}
+
+#home-start-btn{
+    background-color: var(--control-green);
+    color: white;
+    border: none;
+    padding: 18px 32px;
+}
+
+#home-info-btn{
+    border: solid 2px rgb(150, 150, 150);
+    color: rgb(150, 150, 150);
+    background-color: transparent;
+}
+
+
+#home-tutorial-btn{
+    border: solid 2px var(--control-blue);
+    color: var(--control-blue);
+    background-color: transparent;
+}

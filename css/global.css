@@ -8,15 +8,11 @@
     --dark-grey-1: #202020;
     --dark-grey-2: #292929;
     --dark-grey-3: #3d3d3d;
-    /* --light-grey: #f1f1f1;
-    --dark-grey-1: #f7f7f7;
-    --dark-grey-2: #e4e4e4;
-    --dark-grey-3: #cccccc; */
 
     --main-text: #fff;
-    /* --main-text: #000; */
 
     --control-blue: rgb(90, 105, 185);
+    --control-red: rgb(196, 73, 73);
     --control-green: rgb(78, 155, 88);
     --control-purple: rgb(133, 94, 170);
 }

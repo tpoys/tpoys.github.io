@@ -2,7 +2,7 @@ let selectionMode = null;
 let selectionBox = null;
 let startX = 0;
 let startY = 0;
-let currentlySelectedObjects = new Set(); // Track selected objects
+let currentlySelectedObjects = new Set(); 
 
 let selectionModePopup = document.getElementById('selection-mode-popup');
 let navbar = document.getElementById('navbar');
@@ -10,16 +10,9 @@ let eventsControlContainer = document.getElementById('events-controls-container'
 let evidenceControlContainer = document.getElementById('evidence-controls-container');
 let selectionModeLabel = document.getElementById('selection-mode-label');
 
-// Function to enter selection mode and update selection box color
 function enterSelectionMode(mode) {
     selectionMode = mode;
     graphicsContainer.style.cursor = 'crosshair';
-    // document.querySelectorAll('.object').forEach(el => {
-    //     if (!el.classList.contains(`${mode}-object`)) {
-    //         el.style.cursor = 'pointer';
-    //     }
-    // });
-    
     selectionModePopup.style.display = 'flex';
 
     const icon = selectionModePopup.querySelector('i');
@@ -29,7 +22,6 @@ function enterSelectionMode(mode) {
 
     const opac = '0.2';
 
-    // Set opacity of the container div
     eventsControlContainer.style.opacity = opac;
     eventsControlContainer.style.pointerEvents = 'none';
     evidenceControlContainer.style.opacity = opac;
@@ -43,11 +35,13 @@ function enterSelectionMode(mode) {
     }
     document.getElementById('options-container').style.opacity = opac;
     document.getElementById('options-container').style.pointerEvents = 'none';
-    document.getElementById('presets-menu').style.opacity = opac;
-    document.getElementById('presets-menu').style.pointerEvents = 'none';
-
-
-    
+    if(document.getElementById('presets-menu')){
+        document.getElementById('presets-menu').style.opacity = opac;
+        document.getElementById('presets-menu').style.pointerEvents = 'none';
+    }
+    if(document.getElementById('tutorial-dialogue-container')){
+        document.getElementById('tutorial-dialogue-container').style.pointerEvents = 'none';
+    }
 }
 
 function exitSelectionMode(){
@@ -68,8 +62,13 @@ function exitSelectionMode(){
     }
     document.getElementById('options-container').style.opacity = 1;
     document.getElementById('options-container').style.pointerEvents = 'all';
-    document.getElementById('presets-menu').style.opacity = 1;
-    document.getElementById('presets-menu').style.pointerEvents = 'all';
+    if(document.getElementById('presets-menu')){
+        document.getElementById('presets-menu').style.opacity = 1;
+        document.getElementById('presets-menu').style.pointerEvents = 'all';
+    }
+    if(document.getElementById('tutorial-dialogue-container')){
+        document.getElementById('tutorial-dialogue-container').style.pointerEvents = 'all';
+    }
 
 }
 
@@ -82,14 +81,12 @@ document.addEventListener('keydown', (event) => {
 });
 
 
-// Mouse down event to start drawing the selection box
 graphicsContainer.addEventListener('mousedown', (e) => {
     document.getElementById('selection-mode-popup').style.pointerEvents = 'none';
-    if (selectionMode && e.button === 0) { // Only trigger on left-click
+    if (selectionMode && e.button === 0) { 
         startX = e.clientX;
         startY = e.clientY;
 
-        // Create the selection box
         selectionBox = document.createElement('div');
         selectionBox.style.position = 'absolute';
         selectionBox.style.border = `2px dashed ${getModeColour(selectionMode)}`;
@@ -101,14 +98,12 @@ graphicsContainer.addEventListener('mousedown', (e) => {
     }
 });
 
-// Mouse move event to update the size of the selection box and dynamically select objects
 graphicsContainer.addEventListener('mousemove', (e) => {
     if (selectionBox) {
         updateSelectionBox(e);
     }
 });
 
-// Mouse up event to finalize selection
 graphicsContainer.addEventListener('mouseup', () => {
     if (selectionBox) {
         updateDynamicSelection();
@@ -116,14 +111,12 @@ graphicsContainer.addEventListener('mouseup', () => {
         graphicsContainer.removeChild(selectionBox);
         selectionBox = null;
         graphicsContainer.style.cursor = 'crosshair';
-        // selectionMode = null;
-        currentlySelectedObjects.clear(); // Reset tracking
+        currentlySelectedObjects.clear();
     }
     document.getElementById('selection-mode-popup').style.pointerEvents = 'all';
 
 });
 
-// Function to update the selection box size and position
 function updateSelectionBox(e) {
     const x = Math.min(e.clientX, startX);
     const y = Math.min(e.clientY, startY);
@@ -136,18 +129,15 @@ function updateSelectionBox(e) {
     selectionBox.style.height = `${height}px`;
 }
 
-// Function to update selection dynamically as the mouse moves
 function updateDynamicSelection() {
     const selectionRect = selectionBox.getBoundingClientRect();
     const allObjects = document.querySelectorAll('.object');
 
-    // Track objects that need to be updated
     const newlySelectedObjects = new Set();
 
     allObjects.forEach((object) => {
         const objectRect = object.getBoundingClientRect();
         
-        // Check if the object intersects with the selection box
         const isIntersecting =
             selectionRect.left < objectRect.right &&
             selectionRect.right > objectRect.left &&
@@ -156,13 +146,11 @@ function updateDynamicSelection() {
 
         if (isIntersecting) {
             newlySelectedObjects.add(object);
-            // Apply selection if not already selected
             if (!currentlySelectedObjects.has(object)) {
                 applySelectionMode(object);
                 currentlySelectedObjects.add(object);
             }
         } else {
-            // Remove selection if object was previously selected but is no longer intersecting
             if (currentlySelectedObjects.has(object)) {
                 undoSelectionMode(object);
                 currentlySelectedObjects.delete(object);
@@ -171,7 +159,6 @@ function updateDynamicSelection() {
     });
 }
 
-// Function to determine the color of the selection box border
 function getModeColour(mode, opacity = null) {
     const rgba = document.documentElement.style.getPropertyValue(`--${mode}-color`).trim();
 
@@ -191,63 +178,12 @@ function getModeColour(mode, opacity = null) {
 
 function getModeLabel(mode){
     return document.getElementById(`${mode}-label`).innerHTML;
-    // let label;
-    // switch (mode) {
-    //     case 'A1':
-    //         label = eventLabels[0];
-    //         break;
-    //     case 'A2':
-    //         label = eventLabels[1];
-    //         break;
-    //     case 'B1':
-    //         label = evidenceLabels[0];
-    //         break;
-    //     case 'B2':
-    //         label = evidenceLabels[1];
-    //         break;
-    //     default:
-    //         label = "?";
-    //         break;
-    // }
-    // return label;
 }
 
-// Function to apply the selection mode action on the objects
 function applySelectionMode(object) {
-    // switch (selectionMode) {
-    //     case 'A1':
-    //         object.classList.add('event');
-    //         // numEvent += 1;
-    //         break;
-    //     case 'A2':
-    //         object.classList.remove('event');
-    //         // numEvent -= 1;
-    //         break;
-    //     case 'B1':
-    //         object.classList.add('positive');
-    //         if(object.classList.contains("event")){
-    //             // numTruePos += 1;
-    //         }
-    //         else{
-    //             // numFalseNeg += 1;
-    //         }
-    //         break;
-    //     case 'B2':
-    //         object.classList.remove('positive');
-    //         if(object.classList.contains("event")){
-    //             // numTruePos -= 1;
-    //         }
-    //         else{
-    //             // numFalseNeg -= 1;
-    //         }
-    //         break;
-    //     default:
-    //         break;
-    // }
     const [type, number] = selectionMode.split('-');
     if (!type || isNaN(number)) return;
     
-    // Remove any existing class of the same type (event-[n]-object or evidence-[n]-object)
     const classPattern = new RegExp(`^${type}-\\d+-object$`);
     object.classList.forEach(cls => {
         if (classPattern.test(cls)) {
@@ -255,13 +191,11 @@ function applySelectionMode(object) {
         }
     });
     
-    // Add the new class
     object.classList.add(`${selectionMode}-object`);
     updateProbabilityLabels();
     stateHasChanged();
 }
 
-// Function to undo the selection mode action
 function undoSelectionMode(object) {
     // switch (selectionMode) {
     //     case 'A1':

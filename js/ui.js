@@ -75,6 +75,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         document.getElementById('navbar-customise').classList.add('active');
         resetGridEffects();
+        if(tutorialState == 5){
+            tutorialState += 1;
+            updateTutorialState();
+        }
         // on first time opening evidence section, assign random evidence event to each object
         if(!evidenceTabOpened){
             const objects = document.querySelectorAll(".object");
@@ -128,6 +132,10 @@ document.addEventListener('DOMContentLoaded', () => {
         resetGridEffects();
         
         updateBayesDropdowns();
+        if(tutorialState == 10){
+            tutorialState += 1;
+            updateTutorialState();
+        }
     });
 });
 
@@ -535,6 +543,10 @@ function toggleKey() {
 
 toggleKeyBtn.addEventListener('click', toggleKey);
 
+function showKey(){
+    
+}
+
 function updateKey() {
     const keyMain = document.getElementById('key-main');
     if (!keyMain) return;
@@ -897,9 +909,7 @@ function updatePresetOptions(){
                 option.innerText = name;
                 loadStateSelect.appendChild(option);
             }
-        }
-
-        
+        }       
 }
 
 presetsBtn.addEventListener('click', togglePresetsMenu);
@@ -1190,7 +1200,6 @@ function showFeedbackForm(){
         const feedbackInput = textInput.value || "";
 
         if(feedbackInput.toLowerCase().includes("woody")){
-            console.log("WOODY");
             // document.getElementById('feedback-form').remove();
             // const form = document.createElement('div');
             // form.id = 'feedback-form';
@@ -1337,22 +1346,12 @@ function showFeedbackForm(){
 
     container.appendChild(form);
     document.body.appendChild(container);
-
-    // container.addEventListener('click', function (event) {
-    //     if (!form.contains(event.target)) {
-    //         container.remove();
-    //     }
-    // });
 }
 
 document.getElementById('open-feedback-btn').addEventListener('click', showFeedbackForm);
 
 
 function lightMode(){
-        // --light-grey:rgb(63, 63, 63);
-    // --dark-grey-1:rgb(207, 207, 207);
-    // --dark-grey-2:rgb(228, 228, 228);
-    // --dark-grey-3:rgb(245, 245, 245);
     document.documentElement.style.setProperty('--dark-grey-1', 'rgb(233, 233, 233)');
     document.documentElement.style.setProperty('--dark-grey-2', 'rgb(243, 243, 243)');
     document.documentElement.style.setProperty('--dark-grey-3', 'rgb(255, 255, 255)');
@@ -1369,3 +1368,53 @@ function darkMode(){
     document.documentElement.style.setProperty('--light-grey', '#f1f1f1');
     document.documentElement.style.setProperty('--main-text', '#fff');
 }
+
+document.getElementById('close-welcome-btn').addEventListener('click', function(){
+    document.getElementById('welcome-container').style.display = 'none';
+    setTimeout(() => {
+        infoPopup(`Use <b>CTRL +</b> and <b>CTRL -</b><br>to scale the page to fit on your screen`, 5);
+    }, 1000);
+});
+
+document.getElementById('start-from-scratch-btn').addEventListener('click', function(){
+    stateToLoad = localStorage.getItem('saved_state_Empty');
+    const parsedState = JSON.parse(stateToLoad);
+    loadState(parsedState);
+
+    const container = document.getElementById('welcome-container');
+    container.style.opacity = 0;
+    setTimeout(() => {
+        container.style.display = 'none';
+    }, 200);
+
+    setTimeout(() => {
+        infoPopup(`Use <b>CTRL +</b> and <b>CTRL -</b><br>to scale the page to fit on your screen`, 5);
+    }, 1000);
+
+    setTimeout(() => {
+        infoPopup('<b>Left-click + Drag</b> to Pan<br><b>Scroll</b> to Zoom', 5);
+    }, 10000);
+});
+
+document.getElementById('welcome-load-btn').addEventListener('click', function(){
+    const selectedState = document.getElementById('welcome-preset-select').value;
+    stateToLoad = localStorage.getItem(selectedState);
+    const parsedState = JSON.parse(stateToLoad);
+    loadState(parsedState);
+    saveCurrentState('current-state');
+
+    const container = document.getElementById('welcome-container');
+    container.style.opacity = 0;
+    setTimeout(() => {
+        container.style.display = 'none';
+    }, 200);
+
+    toggleKey();
+    setTimeout(() => {
+        infoPopup(`Use <b>CTRL +</b> and <b>CTRL -</b><br>to scale the page to fit on your screen`, 5);
+    }, 1000);
+
+    setTimeout(() => {
+        infoPopup('<b>Left-click + Drag</b> to Pan<br><b>Scroll</b> to Zoom', 5);
+    }, 7000);
+})

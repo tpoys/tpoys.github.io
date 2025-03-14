@@ -1,32 +1,6 @@
-/*
-Data to save in local storage:
-- string: **state_name** (input by the user: #state-name-input innerText)
--  int: **sample_size** (from #input-num-objects value)
-- list(string): **events_list** (from js eventsList, e.g. ["event-2", "event-5", "event-6"])
-- For each event in eventsList:
-	- string: **event_label** (from #event-n-label innerText)
-	- string: **event_color** (from css property --event-n-color)
-	- string: **event_object_color** (from css property --event-n-object-color)
-	- string: **event_object_radius** (from css property --event-n-object-radius)
-- list(string): **evidence_list** (from js evidenceList, e.g. ["evidence-1", "evidence-3"])
-- For each evidence in evidenceList:
-	- string: **evidence_label** (from #evidence-n-label innerText)
-	- string: **evidence_color** (from css property --evidence-n-color)
-	- string: **evidence_object_color** (from css property --evidence-n-object-color)
-	- string: **evidence_object_border_size** (from css property --evidence-n-object-border-size)
-	- string: **evidence_object_text** (from css property --evidence-n-object-text)
-	- string: **evidence_object_font_size** (from css property --evidence-n-object-font-size)
-	- string: **evidence_object_font_weight** (from css property --evidence-n-object-font-weight)
-- array(array(string)): **grid_state** (from calling saveCurrentGridState(), returns array of class name arrays)
- */
-
-
 
 function saveCurrentState(stateName) {
     const sampleSize = parseInt(document.getElementById('input-num-objects').value, 10);
-    
-    // const eventsList = window.eventsList || [];
-    // const evidenceList = window.evidenceList || [];
     
     const eventsData = eventsList.map(eventId => {
         const eventElement = document.getElementById(`${eventId}-label`);
@@ -64,7 +38,6 @@ function saveCurrentState(stateName) {
     };
     
     localStorage.setItem(stateName, JSON.stringify(stateData));
-    // alert(`State '${stateName}' saved successfully!`);
 }
 
 function loadState(json) {
@@ -116,7 +89,6 @@ function stateHasChanged(){
         document.getElementById('load-state-select').value = '';
     }
     saveCurrentState('current-state');
-    console.log("state changed - saved");
 
     // if true view is open, update tree
     if(document.getElementById('toggle-view-switch').checked){
@@ -141,7 +113,11 @@ async function exportGridAsImage() {
     const elements = document.querySelectorAll(".object");
 
     if (elements.length === 0) {
-        console.error("No elements with class .object found.");
+        window.alert('No grid to export!');
+        const saveImageBtn = document.getElementById('export-image-btn');
+        saveImageBtn.innerHTML = `<i class="fa-solid fa-image" style="margin-right:5px;"></i>  Export grid as .PNG`;
+        saveImageBtn.style.background = 'var(--control-blue)';
+        saveImageBtn.style.pointerEvents = 'all';
         return;
     }
 
@@ -184,14 +160,13 @@ async function exportGridAsImage() {
 
         document.body.removeChild(container);
 
-        // Convert canvas to a blob and create a blob URL
         canvas.toBlob(blob => {
             const blobURL = URL.createObjectURL(blob);
-            window.open(blobURL, "_blank"); // Opens in browser's native image viewer
+            window.open(blobURL, "_blank");
         }, "image/png");
 
     } catch (error) {
-        console.error("Screenshot capture failed:", error);
+        console.error("screenshot capture failed:", error);
     }
 
     const saveImageBtn = document.getElementById('export-image-btn');
@@ -233,7 +208,6 @@ async function exportKeyAsImage() {
 
     container.appendChild(keyClone);
     document.body.appendChild(container)
-    // await new Promise(resolve => setTimeout(resolve, 100));
 
     try {
         const canvas = await html2canvas(container, {
@@ -245,28 +219,14 @@ async function exportKeyAsImage() {
 
         document.body.removeChild(container);
 
-        // Convert canvas to a blob and create a blob URL
         canvas.toBlob(blob => {
             const blobURL = URL.createObjectURL(blob);
-            window.open(blobURL, "_blank"); // Opens in browser's native image viewer
+            window.open(blobURL, "_blank");
         }, "image/png");
 
     } catch (error) {
-        console.error("Screenshot capture failed:", error);
+        console.error("screenshot capture failed:", error);
     }
-
-    // html2canvas(container, { logging: true, useCORS: true, backgroundColor: null, scale:2}).then(canvas => {
-    //     canvas.toBlob(blob => {
-    //         if (!blob) {
-    //             console.error('Failed to generate image blob');
-    //             return;
-    //         }
-    //         const blobURL = URL.createObjectURL(blob);
-    //         window.open(blobURL, '_blank');
-    //     }, 'image/png');
-    // });
-
-    // document.body.removeChild(container);
 
     const saveImageBtn = document.getElementById('export-key-btn');
     saveImageBtn.innerHTML = `<i class="fa-solid fa-key" style="margin-right:5px;"></i>  Export key as .PNG`;

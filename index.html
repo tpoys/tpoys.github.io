@@ -16,7 +16,7 @@
     <div id="home-controls-container">
         <div class="home-controls-subcontainer">
             <p class="home-button-label">If you're interested</p>
-            <button class="home-button" id="home-info-btn"><i class="fa-solid fa-info"></i> Some Info</button>
+            <button class="home-button" id="home-info-btn" onclick="openInfo()"><i class="fa-solid fa-info"></i> Some Info</button>
         </div>
         <div class="home-controls-subcontainer">
             <p class="home-button-label">Been here before?</p>
@@ -29,5 +29,14 @@
     </div>
     <p id="watermark"></p>
     <script src="js/home.js"></script>
+    <div id="home-info-background">
+        <div id="home-info">
+            <h2>Some Info</h2>
+            <p>This project was developed by Tom Poyser as a final-year project for a Computer Science degree at the University of Manchester. The brief was to create an interactive tool for learning, teaching, and presenting Bayes' Theorem visually, specifically using whole numbers rather than decimals and percentages.</p>
+            <p>With this tool, you can create and simulate custom real-world scenarios, experiment with different probabilities, and see the results dynamically.</p>
+            <p>If you're unsure how to use the tool, a tutorial is available to guide you. Feedback is always welcome, just use the feedback button on the main interface. Your input is greatly appreciated and will help improve the tool for teaching and learning.</p>
+            <button id="info-back-btn" onclick="closeInfo()"><i class="fa-solid fa-arrow-left"></i> Back</button>
+        </div>
+    </div>
 </body>
 </html>
